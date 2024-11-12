@@ -11,6 +11,7 @@
     .section .text
 .globl trampoline
 trampoline:
+# 4 代表将接下来的数据或代码对齐到4字节边界，即内存地址必须是4的倍数
 .align 4
 .globl uservec
 uservec:
@@ -23,7 +24,7 @@ uservec:
         # sscratch points to where the process's p->trapframe is
         # mapped into user space, at TRAPFRAME.
         #
-
+        # sscratch这个CSR寄存器的作用就是一个cache，它只负责存某一个值，这里它保存的就是TRAPFRAME结构体的位置
 	# swap a0 and sscratch
         # so that a0 is TRAPFRAME
         csrrw a0, sscratch, a0
@@ -61,6 +62,7 @@ uservec:
         sd t6, 280(a0)
 
 	# save the user a0 in p->trapframe->a0
+        # 最后保存a0
         csrr t0, sscratch
         sd t0, 112(a0)
 

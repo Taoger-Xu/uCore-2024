@@ -118,8 +118,9 @@ debug: build/kernel .gdbinit
 
 CHAPTER ?= $(shell git rev-parse --abbrev-ref HEAD | grep -oP 'ch\K[0-9]')
 
+# -C 选项用于告诉 make 切换到指定的目录执行命令
 user:
 	make -C $(U) CHAPTER=$(CHAPTER) BASE=$(BASE)
-
+	
 test: user run
 

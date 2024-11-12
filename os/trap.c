@@ -3,13 +3,17 @@
 #include "loader.h"
 #include "syscall.h"
 
+// trampoline和uservec两个符号在trampoline.S定义
 extern char trampoline[], uservec[], boot_stack_top[];
 extern void *userret(uint64);
 
 // set up to take exceptions and traps while in the kernel.
+// uservec函数位于trampoline.S中，实现内核栈和用户栈的切换
 void trap_init(void)
-{
-	w_stvec((uint64)uservec & ~0x3);
+{	
+	// 设置kernel处理trap的函数
+	// 在 Trap 触发的一瞬间， CPU 就会切换到 S 特权级并跳转到 stvec 所指示的位置
+	w_stvec((uint64)uservec & ~0x3); // 写 stvec, 最后两位表明跳转模式，该实验始终为 0
 }
 
 //
@@ -56,6 +60,7 @@ void usertrap(struct trapframe *trapframe)
 //
 // return to user space
 //
+// 从S态返回U态是由 usertrapret 函数实现的
 void usertrapret(struct trapframe *trapframe, uint64 kstack)
 {
 	trapframe->kernel_satp = r_satp(); // kernel page table

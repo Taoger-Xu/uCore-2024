@@ -3,6 +3,7 @@
 
 #include "types.h"
 
+// 用户的thread进入trap后，需要保存在用户态的所有寄存器到特定的内存区，即trapframe
 struct trapframe {
 	/*   0 */ uint64 kernel_satp; // kernel page table
 	/*   8 */ uint64 kernel_sp; // top of process's kernel stack

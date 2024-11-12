@@ -18,7 +18,7 @@ void clean_bss()
 void main()
 {
 	clean_bss();
-	printf("hello wrold!\n");
+	printf("hello world!\n");
 	trap_init();
 	loader_init();
 	run_next_app();
